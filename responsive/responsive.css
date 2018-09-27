@@ -2,8 +2,6 @@
     content:url(software.png);
 }
 
-/*(top, right, bottom, left)*/
-
 @media only screen {
     .software {
         position: absolute;
@@ -27,7 +25,29 @@
         position: absolute;
         left: 0%;
         top: 0;
-        clip: rect(0px, 1198px, 580px, 860px);
+        clip: rect(0px, 1200px, 580px, 860px);
         margin-left: -860px
+    }
+}
+
+@media only screen and (max-width: 800px) {
+    .software {
+        position: absolute;
+        top: 0%;
+        left: 0;
+        clip: rect(587px, 718px, 1211px, 0px);
+        margin-top: -587px;
+        margin-left: 0px;
+    }
+}
+
+@media only screen and (max-width: 600px) {
+    .software {
+        position: absolute;
+        top: 0%;
+        left: 0;
+        clip: rect(587px, 1204px, 1211px, 718px);
+        margin-top: -587px;
+        margin-left: -718px;
     }
 }
