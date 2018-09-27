@@ -7,7 +7,7 @@
 @media only screen {
     .software {
         position: absolute;
-        right: 0;
+        top: 0;
         clip: rect(0px, 440px, 580px, 0);
     }
 }
@@ -15,15 +15,19 @@
 @media only screen and (max-width: 1200px) {
     .software {
         position: absolute;
-        right: 0;
+        left: 0%;
+        top: 0;
         clip: rect(0px, 860px, 580px, 440px);
+        margin-left: -440px
     }
 }
 
 @media only screen and (max-width: 1000px) {
     .software {
         position: absolute;
-        right: 0;
+        left: 0%;
+        top: 0;
         clip: rect(0px, 1198px, 580px, 860px);
+        margin-left: -860px
     }
 }
