@@ -14,6 +14,40 @@
     <div id="lyrics"></div>
 
 
-    <script></script>
+    <script type="text/javascript">
+        var video = document.getElementById("wedo");
+        var caption = document.getElementById("lyrics");
+
+        function displayLyrics() {
+            if (video.currentTime < 3.5) {
+                caption.innerHTML ="";
+            } else if (video.currentTime < 6) {
+                caption.innerHTML = "Who controls the British crown?";
+            } else if (video.currentTime < 8) {
+                caption.innerHTML = "Who keeps the metric system down?";
+            } else if (video.currentTime < 12.5) {
+                caption.innerHTML = "We do, we do!";
+            } else if (video.currentTime < 14.5) {
+                caption.innerHTML = "Who keeps Atlantis off the maps?";
+            } else if (video.currentTime < 16.75) {
+                caption.innerHTML = "Who keeps the Martians under wraps?";
+            } else if (video.currentTime < 20) {
+                caption.innerHTML = "We do, we do!";
+            } else if (video.currentTime < 25) {
+                caption.innerHTML = "Who holds back the electric car?";
+            } else if (video.currentTime < 29) {
+                caption.innerHTML = "Who makes Steve Guttenberg a star?";
+            } else if (video.currentTime < 33.5) {
+                caption.innerHTML = "We do, we do!";
+            } else if (video.currentTime < 35.5) {
+                caption.innerHTML = "Who robs cavefish of their sight?";
+            } else if (video.currentTime < 37.5) {
+                caption.innerHTML = "Who rigs every Oscar night?";
+            } else {
+                caption.innerHTML = "We do, we do!";
+            }
+        }
+        video.addEventListener("timeupdate", displayLyrics, false);
+    </script>
 </body>
 </html> 
