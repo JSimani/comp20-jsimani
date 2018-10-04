@@ -1,0 +1,13 @@
+body {
+    background-color: rgb(248, 206, 94);
+    font-family: "Comic Sans MS";
+}
+
+h1 {
+    font-size: 36px;
+}
+
+#lyrics {
+    font-weight: bold;
+    font-size: 24px;
+}
