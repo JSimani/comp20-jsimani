@@ -1,8 +1,6 @@
 function createMap() {
-    var mapOptions = {
-        center: new google.maps.LatLng(42.352271, -71.05524200000001),
-        zoom: 10,
-        mapTypeId: google.maps.MapTypeId.HYBRID
-    }
-    var map = new google.maps.Map(document.getElementById("map"), mapOptions);
+    var map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 40.674, lng: -73.945},
+        zoom: 12,
+        });
 }
