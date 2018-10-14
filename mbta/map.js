@@ -7,9 +7,9 @@ function createMap() {
 
     var image = {
         url: "icon.png",
-        scaledSize: new google.maps.Size(25, 25), 
+        scaledSize: new google.maps.Size(30, 30), 
         origin: new google.maps.Point(0,0), 
-        anchor: new google.maps.Point(0, 0) 
+        anchor: new google.maps.Point(15, 15) 
     };
 
     var stops = [
