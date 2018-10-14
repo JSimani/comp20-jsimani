@@ -38,6 +38,7 @@ function createMap() {
     ];
 
     createMarkers(map, image, stops);
+    createPaths(map, stops);
 }
 
 function createMarkers(map, image, stops) {
@@ -52,4 +53,27 @@ function createMarkers(map, image, stops) {
         });
     }
     
+}
+
+function createPaths(map, stops) {
+    var trainPathCoordinates = [];
+
+    for (var i = 0; i < stops.length; i++) {
+        var currentStop = {lat: stops[i][1], lng: stops[i][2]}
+        trainPathCoordinates.push(currentStop);
+    }
+
+    console.log(trainPathCoordinates);
+
+    var trainPath = new google.maps.Polyline({
+          path: trainPathCoordinates,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+
+    trainPath.setMap(map);
+
+
 }
