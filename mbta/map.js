@@ -1,7 +1,7 @@
 function createMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 42.352271, lng: -71.05524200000001},
-        zoom: 14,
+        zoom: 13,
     });
 
 
@@ -39,7 +39,7 @@ function createMap() {
 
     createMarkers(map, image, stops);
     createPaths(map, stops);
-    gettCurrentLocation(map);
+    getCurrentLocation(map);
 }
 
 function createMarkers(map, image, stops) {
@@ -93,7 +93,7 @@ function createPaths(map, stops) {
     Ashmont.setMap(map);
 }
 
-function gettCurrentLocation(map) {
+function getCurrentLocation(map) {
     var options = {
         enableHighAccuracy: true
     };
@@ -110,18 +110,18 @@ function gettCurrentLocation(map) {
 }
 
 function addCurrentLocation(map, pos) {
-    var currentLocation = pos["coords"];
-
     var coordinates = {
         lat: pos.coords.latitude,
         lng: pos.coords.longitude
     };
 
+    map.setCenter(coordinates);
+
     var marker = new google.maps.Marker({
             position: coordinates,
             map: map,
             title: "currentPosition"
-        });
+    });
 }
 
 
