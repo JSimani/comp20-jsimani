@@ -39,6 +39,7 @@ function createMap() {
 
     createMarkers(map, image, stops);
     createPaths(map, stops);
+    gettCurrentLocation(map);
 }
 
 function createMarkers(map, image, stops) {
@@ -91,3 +92,44 @@ function createPaths(map, stops) {
 
     Ashmont.setMap(map);
 }
+
+function gettCurrentLocation(map) {
+    var options = {
+        enableHighAccuracy: true
+    };
+
+    var success = function(pos) {
+        addCurrentLocation(map, pos)
+    };
+
+    var error = function(err) {
+        console.warn('ERROR(${err.code}): ${err.message}');
+    }
+
+    navigator.geolocation.getCurrentPosition(success, error, options);
+}
+
+function addCurrentLocation(map, pos) {
+    var currentLocation = pos["coords"];
+
+    var coordinates = {
+        lat: pos.coords.latitude,
+        lng: pos.coords.longitude
+    };
+
+    var marker = new google.maps.Marker({
+            position: coordinates,
+            map: map,
+            title: "currentPosition"
+        });
+}
+
+
+
+
+
+
+
+
+
+
