@@ -115,7 +115,7 @@ function addCurrentLocation(map, pos) {
         lng: pos.coords.longitude
     };
 
-    map.setCenter(coordinates);
+    map.panTo(coordinates);
 
     var marker = new google.maps.Marker({
             position: coordinates,
