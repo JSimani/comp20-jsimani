@@ -90,6 +90,4 @@ function createPaths(map, stops) {
         });
 
     Ashmont.setMap(map);
-
-
 }

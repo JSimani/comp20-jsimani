@@ -6,11 +6,10 @@
         <title>MBTA Schedule</title>
         <link rel="stylesheet" href="style.css"/>
         <meta charset="utf-8">
-    
-    </head>
-    <body>
-        <div id="map"></div>
-        <script src="map.js"></script>
         <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBOZaAkC9g-iOBmENf8BgrXV9bes_xbGJo&callback=createMap"></script>
+        <script src="map.js"></script>
+    </head>
+    <body onload="createMap()">
+        <div id="map"></div>
     </body>
 </html>
