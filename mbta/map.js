@@ -199,13 +199,15 @@ function addSchedule(stop) {
     var southBound = [];
     var northBound = [];
 
-    var requestID = "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id=" + stop_id;
+    var requestID = "https://api-v3.mbta.com/predictions?filter[route]=Red&filter[stop]=" + stop_id + "&page[limit]=10&page[offset]=0&sort=departure_time";
     request.open("GET", requestID, true);
 
     request.onreadystatechange = function() {
         if (request.readyState == 4 && request.status == 200) {
             var rawData = request.responseText;
             var schedule = JSON.parse(rawData);
+            console.log(stop.title);
+            console.log(schedule);
 
             for (var i = 0; i < schedule.data.length; i++) {
                 var arrival = schedule.data[i].attributes;
@@ -248,9 +250,6 @@ function addSchedule(stop) {
 
     request.send();
 }
-
-
-
 
 
 
