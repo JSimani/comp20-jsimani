@@ -137,38 +137,37 @@ function addCurrentLocation(pos) {
     mapInfo.markers.push(currentLocation);
     var closestStop = mapInfo.markers[0];
     var minDistance = google.maps.geometry.spherical.
-                      computeDistanceBetween(currentLocation.position, 
-                                             closestStop.position);
+                  computeDistanceBetween(currentLocation.position, 
+                                         closestStop.position);
+    for (var i = 0; i < mapInfo.markers.length; i++) {
+        if (mapInfo.markers[i].title == "Current Location") {
+            continue;
+        } 
 
-    console.log(minDistance);
+        var distance = google.maps.geometry.spherical.
+                       computeDistanceBetween(mapInfo.markers[i].position,
+                                              currentLocation.position);
+
+        if (distance < minDistance) {
+            minDistance = distance;
+            closestStop = mapInfo.markers[i];
+        }
+    }
+
+    var pathCoordinates = [currentLocation.position, closestStop.position];
+
+    var closestPath = new google.maps.Polyline({
+      path: pathCoordinates,
+      geodesic: true,
+      strokeColor: '#228B22',
+      strokeOpacity: 1.0,
+      strokeWeight: 3
+    });
+
+    closestPath.setMap(mapInfo.map);
 
     currentLocation.addListener('click', function() {
-        for (var i = 0; i < mapInfo.markers.length; i++) {
-            if (mapInfo.markers[i].title == "Current Location") {
-                continue;
-            } 
-
-            var distance = google.maps.geometry.spherical.
-                           computeDistanceBetween(mapInfo.markers[i].position,
-                                                  currentLocation.position);
-
-            if (distance < minDistance) {
-                minDistance = distance;
-                closestStop = mapInfo.markers[i];
-            }
-        }
-
-        var pathCoordinates = [currentLocation.position, closestStop.position];
-
-        var closestPath = new google.maps.Polyline({
-          path: pathCoordinates,
-          geodesic: true,
-          strokeColor: '#228B22',
-          strokeOpacity: 1.0,
-          strokeWeight: 3
-        });
-
-        closestPath.setMap(mapInfo.map);
+        console.log("Closest Stop: " + closestStop);
     });
 }
 
