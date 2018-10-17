@@ -47,6 +47,7 @@ function createMap() {
     createMarkers();
     createPaths();
     getCurrentLocation();
+    
 }
 
 function createMarkers() {
@@ -58,10 +59,12 @@ function createMarkers() {
             map: mapInfo.map,
             animation: google.maps.Animation.DROP,
             icon: image,
-            title: stop[0]
+            title: stop[0],
+            label: stop[3]
         });
 
         mapInfo.markers.push(marker);
+        addSchedule(marker);
     }
 }
 
@@ -188,8 +191,63 @@ function addCurrentLocationPath() {
     });
 }
 
+function addSchedule(stop) {
+    var stop_id = stop.label;
 
+    var request = new XMLHttpRequest();
+    var message = new Object();
+    var southBound = [];
+    var northBound = [];
 
+    var requestID = "https://chicken-of-the-sea.herokuapp.com/redline/schedule.json?stop_id=" + stop_id;
+    request.open("GET", requestID, true);
+
+    request.onreadystatechange = function() {
+        if (request.readyState == 4 && request.status == 200) {
+            var rawData = request.responseText;
+            var schedule = JSON.parse(rawData);
+
+            for (var i = 0; i < schedule.data.length; i++) {
+                var arrival = schedule.data[i].attributes;
+
+                if (arrival.direction_id == 0) {
+                    southBound.push(new Date(arrival.arrival_time));
+                } else {
+                    northBound.push(new Date(arrival.arrival_time));
+                }
+            }
+
+            var innerHTML = "<p>South Bound:</p><ul>";
+            for (var i = 0; i < southBound.length; i++) {
+                var minutes = southBound[i].getMinutes();
+                if (minutes < 10) {
+                    minutes = "0" + minutes;
+                }
+                innerHTML += "<li>" + southBound[i].getHours() + ":" + minutes + "</li>";
+            }
+            innerHTML += "</ul><p>North Bound</p><ul>";
+            for (var i = 0; i < northBound.length; i++) {
+                var minutes = northBound[i].getMinutes();
+                if (minutes < 10) {
+                    minutes = "0" + minutes;
+                }
+                innerHTML += "<li>" + northBound[i].getHours() + ":" + minutes + "</li>";
+            }
+            innerHTML += "</ul>";
+
+            var infowindow = new google.maps.InfoWindow();
+            infowindow.setContent(innerHTML);
+
+            stop.addListener('click', function() {
+                infowindow.open(mapInfo.map, stop);
+            });
+            
+            
+        }
+    }
+
+    request.send();
+}
 
 
 
