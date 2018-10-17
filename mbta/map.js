@@ -60,12 +60,13 @@ function createMarkers() {
             animation: google.maps.Animation.DROP,
             icon: image,
             title: stop[0],
-            label: stop[3]
+            stop_id: stop[3]
         });
 
         mapInfo.markers.push(marker);
         addSchedule(marker);
     }
+    console.log(mapInfo.markers[0]);
 }
 
 function createPaths() {
@@ -192,7 +193,7 @@ function addCurrentLocationPath() {
 }
 
 function addSchedule(stop) {
-    var stop_id = stop.label;
+    var stop_id = stop.stop_id;
 
     var request = new XMLHttpRequest();
     var message = new Object();
