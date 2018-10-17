@@ -66,7 +66,6 @@ function createMarkers() {
         mapInfo.markers.push(marker);
         addSchedule(marker);
     }
-    console.log(mapInfo.markers[0]);
 }
 
 function createPaths() {
@@ -200,7 +199,11 @@ function addSchedule(stop) {
     var southBound = [];
     var northBound = [];
 
-    var requestID = "https://api-v3.mbta.com/predictions?filter[route]=Red&filter[stop]=" + stop_id + "&page[limit]=10&page[offset]=0&sort=departure_time&api_key=9829fc6ff8ab4b3b85cfb4eeb2a48a35";
+    var requestID = 
+        "https://api-v3.mbta.com/predictions?filter[route]=Red&filter[stop]=" +
+        stop_id + 
+        "&page[limit]=10&page[offset]=0&sort=departure_time&api_key=" +
+        "9829fc6ff8ab4b3b85cfb4eeb2a48a35";
     request.open("GET", requestID, true);
 
     request.onreadystatechange = function() {
@@ -218,7 +221,9 @@ function addSchedule(stop) {
                 }
             }
 
-            var innerHTML = "<p>South Bound:</p><ul>";
+            var innerHTML = "<div id='InfoWindow'>" + 
+                            "<p id='direction'>South Bound:</p>"+
+                            "<ul id='schedule'>";
             for (var i = 0; i < southBound.length; i++) {
                 var minutes = southBound[i].getMinutes();
                 if (minutes < 10) {
@@ -226,7 +231,8 @@ function addSchedule(stop) {
                 }
                 innerHTML += "<li>" + southBound[i].getHours() + ":" + minutes + "</li>";
             }
-            innerHTML += "</ul><p>North Bound</p><ul>";
+            innerHTML += "</ul><p id='direction'>North Bound:</p>" + 
+                         "<ul id='schedule'>";
             for (var i = 0; i < northBound.length; i++) {
                 var minutes = northBound[i].getMinutes();
                 if (minutes < 10) {
@@ -234,7 +240,7 @@ function addSchedule(stop) {
                 }
                 innerHTML += "<li>" + northBound[i].getHours() + ":" + minutes + "</li>";
             }
-            innerHTML += "</ul>";
+            innerHTML += "</ul></div>";
 
             var infowindow = new google.maps.InfoWindow();
             infowindow.setContent(innerHTML);
