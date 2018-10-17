@@ -1,8 +1,16 @@
+var mapInfo = {
+    map: null,
+    markers: [],
+    curloc: null
+};
+
 function createMap() {
     var map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 42.352271, lng: -71.05524200000001},
         zoom: 13,
     });
+
+    mapInfo.map = map;
 
 
     var image = {
@@ -37,26 +45,28 @@ function createMap() {
         ['Ashmont', 42.284652, -71.06448899999999, 'place-asmnl']
     ];
 
-    createMarkers(map, image, stops);
-    createPaths(map, stops);
-    getCurrentLocation(map);
+    createMarkers(image, stops);
+    createPaths(stops);
+    getCurrentLocation();
 }
 
-function createMarkers(map, image, stops) {
+function createMarkers(image, stops) {
     for (var i = 0; i < stops.length; i++) {
         stop = stops[i];
         var marker = new google.maps.Marker({
             position: {lat: stop[1], lng: stop[2]},
-            map: map,
+            map: mapInfo.map,
             animation: google.maps.Animation.DROP,
             icon: image,
             title: stop[0]
         });
+
+        mapInfo.markers.push(marker);
     }
     
 }
 
-function createPaths(map, stops) {
+function createPaths(stops) {
     var trainPathCoordinates = [];
 
     for (var i = 0; i < 18; i++) {
@@ -72,7 +82,7 @@ function createPaths(map, stops) {
           strokeWeight: 2
         });
 
-    Braintree.setMap(map);
+    Braintree.setMap(mapInfo.map);
 
     trainPathCoordinates = [];
     var JFK = {lat: stops[12][1], lng: stops[12][2]}
@@ -90,16 +100,16 @@ function createPaths(map, stops) {
           strokeWeight: 2
         });
 
-    Ashmont.setMap(map);
+    Ashmont.setMap(mapInfo.map);
 }
 
-function getCurrentLocation(map) {
+function getCurrentLocation() {
     var options = {
         enableHighAccuracy: true
     };
 
     var success = function(pos) {
-        addCurrentLocation(map, pos)
+        addCurrentLocation(pos)
     };
 
     var error = function(err) {
@@ -109,18 +119,56 @@ function getCurrentLocation(map) {
     navigator.geolocation.getCurrentPosition(success, error, options);
 }
 
-function addCurrentLocation(map, pos) {
+function addCurrentLocation(pos) {
     var coordinates = {
         lat: pos.coords.latitude,
         lng: pos.coords.longitude
     };
 
-    map.panTo(coordinates);
+    mapInfo.map.panTo(coordinates);
 
-    var marker = new google.maps.Marker({
+    var currentLocation = new google.maps.Marker({
             position: coordinates,
-            map: map,
-            title: "currentPosition"
+            map: mapInfo.map,
+            animation: google.maps.Animation.DROP,
+            title: "Current Location"
+    });
+
+    mapInfo.markers.push(currentLocation);
+    var closestStop = mapInfo.markers[0];
+    var minDistance = google.maps.geometry.spherical.
+                      computeDistanceBetween(currentLocation.position, 
+                                             closestStop.position);
+
+    console.log(minDistance);
+
+    currentLocation.addListener('click', function() {
+        for (var i = 0; i < mapInfo.markers.length; i++) {
+            if (mapInfo.markers[i].title == "Current Location") {
+                continue;
+            } 
+
+            var distance = google.maps.geometry.spherical.
+                           computeDistanceBetween(mapInfo.markers[i].position,
+                                                  currentLocation.position);
+
+            if (distance < minDistance) {
+                minDistance = distance;
+                closestStop = mapInfo.markers[i];
+            }
+        }
+
+        var pathCoordinates = [currentLocation.position, closestStop.position];
+
+        var closestPath = new google.maps.Polyline({
+          path: pathCoordinates,
+          geodesic: true,
+          strokeColor: '#228B22',
+          strokeOpacity: 1.0,
+          strokeWeight: 3
+        });
+
+        closestPath.setMap(mapInfo.map);
     });
 }
 
