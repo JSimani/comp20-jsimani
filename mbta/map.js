@@ -27,13 +27,6 @@ var stops = [
     ['Ashmont', 42.284652, -71.06448899999999, 'place-asmnl']
 ];
 
-var image = {
-    url: "icon.png",
-    scaledSize: new google.maps.Size(30, 30), 
-    origin: new google.maps.Point(0,0), 
-    anchor: new google.maps.Point(15, 15) 
-};
-
 function createMap() {
     map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 42.352271, lng: -71.05524200000001},
@@ -43,7 +36,6 @@ function createMap() {
     createMarkers();
     createPaths();
     getCurrentLocation();
-    
 }
 
 function createMarkers() {
@@ -54,7 +46,12 @@ function createMarkers() {
             position: {lat: stop[1], lng: stop[2]},
             map: map,
             animation: google.maps.Animation.DROP,
-            icon: image,
+            icon: { 
+                url: "icon.png",
+                scaledSize: new google.maps.Size(30, 30), 
+                origin: new google.maps.Point(0,0), 
+                anchor: new google.maps.Point(15, 15) 
+            },
             title: stop[0],
             stop_id: stop[3]
         });
