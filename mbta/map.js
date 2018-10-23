@@ -1,8 +1,6 @@
-var mapInfo = {
-    map: null,
-    markers: [],
-    curloc: null
-};
+var map = null;
+var markers = [];
+var curloc = null;
 
 var stops = [
     ['Alewife', 42.395428, -71.142483, 'place-alfcl'],
@@ -37,12 +35,10 @@ var image = {
 };
 
 function createMap() {
-    var map = new google.maps.Map(document.getElementById('map'), {
+    map = new google.maps.Map(document.getElementById('map'), {
         center: {lat: 42.352271, lng: -71.05524200000001},
         zoom: 13,
     });
-
-    mapInfo.map = map;
 
     createMarkers();
     createPaths();
@@ -56,14 +52,14 @@ function createMarkers() {
 
         var marker = new google.maps.Marker({
             position: {lat: stop[1], lng: stop[2]},
-            map: mapInfo.map,
+            map: map,
             animation: google.maps.Animation.DROP,
             icon: image,
             title: stop[0],
             stop_id: stop[3]
         });
 
-        mapInfo.markers.push(marker);
+        markers.push(marker);
         addSchedule(marker);
     }
 }
@@ -84,7 +80,7 @@ function createPaths() {
           strokeWeight: 2
         });
 
-    Braintree.setMap(mapInfo.map);
+    Braintree.setMap(map);
 
     trainPathCoordinates = [];
     var JFK = {lat: stops[12][1], lng: stops[12][2]}
@@ -102,7 +98,7 @@ function createPaths() {
           strokeWeight: 2
         });
 
-    Ashmont.setMap(mapInfo.map);
+    Ashmont.setMap(map);
 }
 
 function getCurrentLocation() {
@@ -127,33 +123,32 @@ function addCurrentLocation(pos) {
         lng: pos.coords.longitude
     };
 
-    mapInfo.map.panTo(coordinates);
+    map.panTo(coordinates);
 
     var currentLocation = new google.maps.Marker({
             position: coordinates,
-            map: mapInfo.map,
+            map: map,
             animation: google.maps.Animation.DROP,
             title: "Current Location"
     });
 
-    mapInfo.curloc = currentLocation;
+    curloc = currentLocation;
     addCurrentLocationPath();
 }
 
 function findClosestStop() {
-    var pos = mapInfo.curloc;
-    var closestStop = mapInfo.markers[0];
+    var closestStop = markers[0];
     var minDistance = google.maps.geometry.spherical.
-                      computeDistanceBetween(pos.position, 
+                      computeDistanceBetween(curloc.position, 
                                              closestStop.position);
-    for (var i = 0; i < mapInfo.markers.length; i++) {
+    for (var i = 0; i < markers.length; i++) {
         var distance = google.maps.geometry.spherical.
-                       computeDistanceBetween(mapInfo.markers[i].position,
-                                              pos.position);
+                       computeDistanceBetween(markers[i].position,
+                                              curloc.position);
 
         if (distance < minDistance) {
             minDistance = distance;
-            closestStop = mapInfo.markers[i];
+            closestStop = markers[i];
         }
     }
 
@@ -161,13 +156,12 @@ function findClosestStop() {
 }
 
 function addCurrentLocationPath() {
-    var pos = mapInfo.curloc;
     var closestStop = findClosestStop();
     var distance = google.maps.geometry.spherical.
                    computeDistanceBetween(closestStop.position,
-                                          pos.position);
+                                          curloc.position);
 
-    var pathCoordinates = [pos.position, closestStop.position];
+    var pathCoordinates = [curloc.position, closestStop.position];
 
     var closestPath = new google.maps.Polyline({
         path: pathCoordinates,
@@ -177,7 +171,7 @@ function addCurrentLocationPath() {
         strokeWeight: 3
     });
 
-    closestPath.setMap(mapInfo.map);
+    closestPath.setMap(map);
 
     var contentString = "<p>Closest Stop: " + closestStop.title + 
                         "<br>Distance: " + 
@@ -186,8 +180,8 @@ function addCurrentLocationPath() {
     var infowindow = new google.maps.InfoWindow();
     infowindow.setContent(contentString);
 
-    pos.addListener('click', function() {
-        infowindow.open(mapInfo.map, pos);
+    curloc.addListener('click', function() {
+        infowindow.open(map, curloc);
     });
 }
 
@@ -246,7 +240,7 @@ function addSchedule(stop) {
             infowindow.setContent(innerHTML);
 
             stop.addListener('click', function() {
-                infowindow.open(mapInfo.map, stop);
+                infowindow.open(map, stop);
             });
             
             
