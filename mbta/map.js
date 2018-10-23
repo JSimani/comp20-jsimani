@@ -216,25 +216,26 @@ function addSchedule(stop) {
             }
 
             var innerHTML = "<div id='InfoWindow'>" + 
+                            "<p id=stop_name>" + stop.title + "</p>" +
                             "<p id='direction'>South Bound:</p>"+
-                            "<ul id='schedule'>";
+                            "<p id='schedule'>";
             for (var i = 0; i < southBound.length; i++) {
                 var minutes = southBound[i].getMinutes();
                 if (minutes < 10) {
                     minutes = "0" + minutes;
                 }
-                innerHTML += "<li>" + southBound[i].getHours() + ":" + minutes + "</li>";
+                innerHTML += southBound[i].getHours() + ":" + minutes + "<br>";
             }
-            innerHTML += "</ul><p id='direction'>North Bound:</p>" + 
-                         "<ul id='schedule'>";
+            innerHTML += "</p><p id='direction'>North Bound:</p>" + 
+                         "<p id='schedule'>";
             for (var i = 0; i < northBound.length; i++) {
                 var minutes = northBound[i].getMinutes();
                 if (minutes < 10) {
                     minutes = "0" + minutes;
                 }
-                innerHTML += "<li>" + northBound[i].getHours() + ":" + minutes + "</li>";
+                innerHTML += northBound[i].getHours() + ":" + minutes + "<br>";
             }
-            innerHTML += "</ul></div>";
+            innerHTML += "</p></div>";
 
             var infowindow = new google.maps.InfoWindow();
             infowindow.setContent(innerHTML);
