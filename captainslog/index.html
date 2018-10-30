@@ -8,7 +8,19 @@
     <link rel="stylesheet" href="style.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
-        // Your work will be done here...
+        var log;
+
+        function addMessage(element) {
+            if(element.keyCode == 13) {
+                newMessage = "<p id='messages'>" + this.value + "</p>";
+                log.prepend(newMessage);
+            }
+        }
+
+        $(document).ready(function() {
+            log = $("#log");
+            $("#msg").on("keydown", addMessage);
+        });
     </script>
 </head>
 
