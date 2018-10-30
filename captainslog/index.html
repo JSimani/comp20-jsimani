@@ -14,11 +14,14 @@
             if(element.keyCode == 13) {
                 newMessage = "<p id='messages'>" + this.value + "</p>";
                 log.prepend(newMessage);
+                localStorage.setItem('messages', log.html());
+
             }
         }
 
         $(document).ready(function() {
             log = $("#log");
+            log.html(localStorage.getItem('messages'));
             $("#msg").on("keydown", addMessage);
         });
     </script>
