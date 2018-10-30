@@ -9,10 +9,36 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         var log;
+        weekdays = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
+        months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+
+        function dateString() {
+            var date = new Date();
+
+            var time = weekdays[date.getDay()] + ' ' + months[date.getMonth()] + 
+                       ' ' + date.getDate() + ' ' + date.getHours() + ':';
+
+            var minutes = date.getMinutes();
+            if (minutes < 10) {
+                minutes = '0' + minutes;
+            }
+
+            var seconds = date.getSeconds();
+            if (seconds < 10) {
+                seconds = '0' + seconds;
+            }
+
+            time += minutes + ':' + seconds + ' ';
+
+            time += date.getFullYear();
+            
+            return time;
+        }
 
         function addMessage(element) {
             if(element.keyCode == 13) {
-                newMessage = "<p id='messages'>" + this.value + "</p>";
+                var time = dateString()
+                newMessage = "<p id='messages'>" + time + " - " + this.value + "</p>";
                 log.prepend(newMessage);
                 localStorage.setItem('messages', log.html());
 
