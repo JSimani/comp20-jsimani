@@ -9,14 +9,19 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script>
         var log;
-        weekdays = [ "Sunday", "Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday" ];
-        months = ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"];
+        weekdays = [ "Sun", "Mon", "Tues", "Wednes", "Thurs", "Fri", "Sat" ];
+        months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
 
         function dateString() {
             var date = new Date();
 
             var time = weekdays[date.getDay()] + ' ' + months[date.getMonth()] + 
-                       ' ' + date.getDate() + ' ' + date.getHours() + ':';
+                       ' ' + date.getDate() + ' ';
+
+            var hours = date.getHours();
+            if (hours < 10) {
+                hours = '0' + hours;
+            }
 
             var minutes = date.getMinutes();
             if (minutes < 10) {
@@ -28,7 +33,7 @@
                 seconds = '0' + seconds;
             }
 
-            time += minutes + ':' + seconds + ' ';
+            time += hours + ':' + minutes + ':' + seconds + ' ';
 
             time += date.getFullYear();
             
