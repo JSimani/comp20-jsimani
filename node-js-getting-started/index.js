@@ -13,3 +13,5 @@ app.get("/scores.json", function(request, response) {
 app.get("/", function(request, response) {
     response.send("Go away!!!");
 });
+
+app.listen(8000);
