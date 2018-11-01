@@ -1,0 +1,7 @@
+{
+    "name": "2048GameServer",
+    "version": "1.0.0",
+    "dependencies": {
+        "express": "latest"
+    }
+}
