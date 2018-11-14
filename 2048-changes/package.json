@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "dependencies": {
         "express": "latest",
-        "nodemon": "^1.18.6",
-        "cors": "latest"
+        "cors": "latest",
+        "mongodb": "^2.2.33",
+        "validator": "latest"
     }
 }

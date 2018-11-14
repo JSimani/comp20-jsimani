@@ -13,8 +13,28 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
   this.setup();
 }
 
+function sendScores(grid, score, username) {
+  var time = new Date();
+
+  if (username == null || username == "") {
+    username = "Anonymous";
+  }
+
+  var params = {
+    username: username,
+    grid: JSON.stringify(grid),
+    score: score, 
+    created_at: time
+  };
+
+  var queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
+  console.log(queryString);
+}
+
 // Restart the game
 GameManager.prototype.restart = function () {
+  sendScores(this.grid, this.score, this.username);
+
   this.storageManager.clearGameState();
   this.actuator.continueGame(); // Clear the game won/lost message
   this.setup();
@@ -43,12 +63,14 @@ GameManager.prototype.setup = function () {
     this.over        = previousState.over;
     this.won         = previousState.won;
     this.keepPlaying = previousState.keepPlaying;
+    this.username    = previousState.username;
   } else {
     this.grid        = new Grid(this.size);
     this.score       = 0;
     this.over        = false;
     this.won         = false;
     this.keepPlaying = false;
+    this.username    = window.prompt("Please enter your name.");
 
     // Add the initial tiles
     this.addStartTiles();
@@ -93,7 +115,8 @@ GameManager.prototype.actuate = function () {
     over:       this.over,
     won:        this.won,
     bestScore:  this.storageManager.getBestScore(),
-    terminated: this.isGameTerminated()
+    terminated: this.isGameTerminated(),
+    username:   this.username
   });
 
 };
@@ -105,7 +128,8 @@ GameManager.prototype.serialize = function () {
     score:       this.score,
     over:        this.over,
     won:         this.won,
-    keepPlaying: this.keepPlaying
+    keepPlaying: this.keepPlaying,
+    username:    this.username
   };
 };
 
