@@ -8,6 +8,12 @@ app.use(cors())
    .use(bodyParser.json())
    .use(bodyParser.urlencoded({ extended: true })); 
 
+app.use(function(req, res, next) {
+  res.header("Access-Control-Allow-Origin", "*");
+  res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+  next();
+});
+
 var mongoUri = process.env.MONGODB_URI || 'mongodb://localhost/2048gameserver';
 var MongoClient = require('mongodb').MongoClient, format = require('util').format;
 var db = MongoClient.connect(mongoUri, function(error, databaseConnection) {
@@ -18,7 +24,7 @@ app.post("/submit", function(req, res) {
     var username = req.body.username;
     var score = req.body.score;
     var grid = req.body.grid;
-    var created_at = req.body.created_at;
+    var created_at = new Date();
     
     //foodItem = foodItem.replace(/[^\w\s]/gi, ''); // remove all special characters.  Can you explain why this is important?
     var invalid = (username == null || score == null || grid == null);
@@ -36,8 +42,16 @@ app.post("/submit", function(req, res) {
                     res.send(500);
                 }
                 else {
-                    console.log("Sending score");
-                    res.send('<html><head><title>Thanks!</title></head><body><h2>Thanks for your submission!</h2></body></html>');
+                    db.collection('scores', function(er, collection) {
+                        collection.find().sort({score: -1}).limit(10).toArray(function(err, results) {
+                            if (!err) {
+                                console.log(results);
+                                res.send(results);
+                            } else {
+                                res.send([]);
+                            }
+                        });
+                    });
                 }
             });
         } else {
@@ -47,12 +61,19 @@ app.post("/submit", function(req, res) {
 });
 
 app.get("/scores.json", function(req, res) {
-    var username = req.body.username;
-    if (username == null){
+    var name = req.query.username;
+    if (name == null){
         res.send([]);
     } else {
-        console.log("No username");
-        res.send(JSON.stringify({ username: null }));
+        db.collection('scores', function(er, collection) {
+            collection.find({username: name}).sort({score: -1}).toArray(function(err, results) {
+                if (!err) {
+                    res.send(results);
+                } else {
+                    res.send([]);
+                }
+            });
+        });
     }
 });
 
@@ -69,11 +90,13 @@ app.get("/", function(req, res) {
             // All results of db.fooditems.find() will go into...
             // ...`results`.  `results` will be an array (or list)
             if (!err) {
-                indexPage += "<!DOCTYPE HTML><html><head><title>2048 Game Center</title></head><body><h1>2048 Game Center</h1><h4>User&emsp;Score&emsp;Timestamp</h4>";
+                indexPage += "<!DOCTYPE HTML><html><head><title>2048 Game Center</title></head><body><h1>2048 Game Center</h1><table><tr><th>Name</th><th>Score</th><th>Timestamp</th></tr>";
+
                 for (var count = 0; count < results.length; count++) {
-                    indexPage += "<p>" + results[count].username + '&emsp;' + results[count].score + '&emsp;' + results[count].created_at + "</p>";
+                    indexPage += "<tr><td>" + results[count].username + "</td><td>" + results[count].score + "</td><td>" + results[count].created_at + "</td></tr>";
                 }
-                indexPage += "</body></html>"
+
+                indexPage += "</table></body></html>"
                 res.send(indexPage);
             } else {
                 res.send('<!DOCTYPE HTML><html><head><title>2048 Game Center</title></head><body><h1>Whoops, something went wrong!</h1></body></html>');
@@ -82,4 +105,10 @@ app.get("/", function(req, res) {
     });
 });
 
+
 app.listen(process.env.PORT || 8888);
+
+
+
+
+

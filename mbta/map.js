@@ -243,7 +243,7 @@ function addSchedule(stop) {
             
             
         }
-    }
+    };
 
     request.send();
 }

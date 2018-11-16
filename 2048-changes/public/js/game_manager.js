@@ -14,8 +14,6 @@ function GameManager(size, InputManager, Actuator, StorageManager) {
 }
 
 function sendScores(grid, score, username) {
-  var time = new Date();
-
   if (username == null || username == "") {
     username = "Anonymous";
   }
@@ -23,16 +21,33 @@ function sendScores(grid, score, username) {
   var params = {
     username: username,
     grid: JSON.stringify(grid),
-    score: score, 
-    created_at: time
+    score: score
   };
 
   var queryString = Object.keys(params).map(key => key + '=' + params[key]).join('&');
-  console.log(queryString);
+
+  var request = new XMLHttpRequest();
+  request.open("POST", 'https://murmuring-dusk-56938.herokuapp.com/submit', true);
+
+  request.onreadystatechange = function() {
+    if (request.readyState == 4 && request.status == 200) {
+      var rawData = request.responseText;
+      var highscores = JSON.parse(rawData);
+      var displayString = "High Scores: \n";
+      for (var i = 0; i < 10 && i < highscores.length; i++) {
+        displayString += (i + 1) + ". " + highscores[i].username + " - " + highscores[i].score + "\n";
+      }
+      window.alert(displayString);
+    }
+  };
+
+  request.setRequestHeader('Content-type', 'application/x-www-form-urlencoded');
+  request.send(queryString);
 }
 
 // Restart the game
 GameManager.prototype.restart = function () {
+  this.username = window.prompt("Please enter your name.");
   sendScores(this.grid, this.score, this.username);
 
   this.storageManager.clearGameState();
@@ -70,7 +85,7 @@ GameManager.prototype.setup = function () {
     this.over        = false;
     this.won         = false;
     this.keepPlaying = false;
-    this.username    = window.prompt("Please enter your name.");
+    this.username    = null;
 
     // Add the initial tiles
     this.addStartTiles();
