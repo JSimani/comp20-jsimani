@@ -27,14 +27,14 @@
         <li>
             Cross Site Scripting
             <ul>
-                <li>Description: The server innately trusts user input, which you should never, ever do. This means that the user can then insert a script as input to the server. When the server then serves content to a webpage, it will run the script and change the webpage to whatever the malicious user wants.</li>
+                <li>Description: The server innately trusts user input, which you should never, ever do. This means that the user can then insert a script as input to the server. When the server then serves content to a webpage, it will run the script and change the webpage to whatever the malicious user wants. This can be accomplished by submitting malicious content to the /submit POST route.</li>
                 <li>Location: <a href="https://cryptic-brook-57226.herokuapp.com/submit">https://cryptic-brook-57226.herokuapp.com/submit</a></li>
                 <li>Severity: Medium. The malicious user of the server can serve any desired content to subsequent users of the server, but he or she cannot access/alter the other data that is stored in a database on the server.</li>
                 <li>Screenshots</li>
                 <a><img src="xss_webpage.png" alt="window alert"></a>
                 <a><img src="xss_submit.png" alt="how to do xss"></a>
                 <li>Resolution: Strip all special characters from user input before using it to serve content to a webpage.</li>
-                <p><pre><code>username.replace(/[^\w\s]/gi, ''); <br>score.replace(/[^\w\s]/gi, ''); <br>grid.replace(/[^\w\s]/gi, '');</code></pre></p>
+                <p><pre><code>req.body.username.replace(/[^\w\s]/gi, ''); <br>req.body.score.replace(/[^\w\s]/gi, ''); <br>req.body.grid.replace(/[^\w\s]/gi, '');</code></pre></p>
             </ul>
         </li>
         <li>
@@ -50,6 +50,19 @@
                 <a><img src="ddos_bash.png" alt="the bash script used to perform the DDoS attack"></a>
                 <br>
                 <li>Resolution: Set up API tokens that are needed to submit a request, and only allow a specific number of requests for that specific API in any given period of time. For example, with the MBTA API, a normal API token can only make 1000 requests per minute.</li>
+            </ul>
+        </li>
+        <li>
+            Exposed Database
+            <ul>
+                <li>Description: A database should be able to store a vast amount of data. Most of the time, when giving users the ability to retreive specific documents in the database, you don't want to give them access to every document. In the /scores.json route, you can access every document in the scores database by giving a key value pair that accesses other </li>
+                <li>Location: <a href="https://cryptic-brook-57226.herokuapp.com/scores.json">https://cryptic-brook-57226.herokuapp.com/scores.json</a></li>
+                <li>Severity: Low. In this specific instance, users can access every element in the collection by accessing the main GET route (/), but in other situations where the entirety of the database isn't readily available to any user, this could likely expose sensitive information that isn't supposed to be publicly accessible.</li>
+                <li>Screenshots</li>
+                <a><img src="exposed_get.png" alt="how to get every entry using a query string"></a>
+                <br>
+                <li>Resolution: Strip all special characters in both the query key and value. </li>
+                <p><pre><code>req.query.username.replace(/[^\w\s]/gi, '');</code></pre></p>
             </ul>
         </li>
     </ol>
