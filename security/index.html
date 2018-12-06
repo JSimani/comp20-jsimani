@@ -23,14 +23,43 @@
     <h2>Abstract of Findings</h2>
 
     <h2>Issues Found</h2>
+    <ol>
+        <li>
+            Cross Site Scripting
+            <ul>
+                <li>Description: The server innately trusts user input, which you should never, ever do. This means that the user can then insert a script as input to the server. When the server then serves content to a webpage, it will run the script and change the webpage to whatever the malicious user wants.</li>
+                <li>Location: <a href="https://cryptic-brook-57226.herokuapp.com/submit">https://cryptic-brook-57226.herokuapp.com/submit</a></li>
+                <li>Severity: Medium. The malicious user of the server can serve any desired content to subsequent users of the server, but he or she cannot access/alter the other data that is stored in a database on the server.</li>
+                <li>Screenshots</li>
+                <a><img src="xss_webpage.png" alt="window alert"></a>
+                <a><img src="xss_submit.png" alt="how to do xss"></a>
+                <li>Resolution: Strip all special characters from user input before using it to serve content to a webpage.</li>
+                <p><pre><code>username.replace(/[^\w\s]/gi, ''); <br>score.replace(/[^\w\s]/gi, ''); <br>grid.replace(/[^\w\s]/gi, '');</code></pre></p>
+            </ul>
+        </li>
+        <li>
+            DDoS Attack
+            <ul>
+                <li>Description: When given too many requests, the server will crash. This is called a Denial of Service Attack because it makes so many requests that the server can no longer handle requests and shuts down to everyone. In the case of this specific web server, the maximum amount of data allowed on the database was 33.00MB. Upon reaching this threshold, the server crashed. Given enough time, Heroku was able to restart the page and increase the threshold, but there was a period of time where the server could no longer handle requests because of the vast amount of data stored in the database.</li>
+                <li>Location: <a href="https://cryptic-brook-57226.herokuapp.com/">https://cryptic-brook-57226.herokuapp.com/</a></li>
+                <li>Severity: High. When experiencing a DDoS Attack, the server is no longer functional. When the server  does not work, a lot of applications that are dependent on it are likely to not function as well.</li>
+                <li>Screenshots</li>
+                <a><img src="ddos_webpage.png" alt="crashed webserver"></a>
+                <a><img src="ddos_mongo.png" alt="database with a lot of memory"></a>
+                <a><img src="ddos_log.png" alt="heroku log of what happened after a certain number of submit requests"></a>
+                <a><img src="ddos_bash.png" alt="the bash script used to perform the DDoS attack"></a>
+                <br>
+                <li>Resolution: Set up API tokens that are needed to submit a request, and only allow a specific number of requests for that specific API in any given period of time. For example, with the MBTA API, a normal API token can only make 1000 requests per minute.</li>
+            </ul>
+        </li>
+    </ol>
 
     <h2>Conclusion</h2>
-        After extensive hacking and attempted breaches into the 2048 game server, I have concluded that it has underlying vulnerabilities that could easily compromise its integrity when used by the wrong people. 
+        <p>After extensive hacking and attempted breaches into the 2048 game server, I have concluded that it has underlying vulnerabilities that could easily compromise its integrity when used by the wrong people. </p>
 
     <h2>References</h2>
     <ul>
-        <li>Brigid Horan</li>
-        <li>Turner Yardley</li>
+        <li><a href="https://ryanstutorials.net/bash-scripting-tutorial/bash-loops.php">Bash Scripting Tutorial - 6. Loops</a></li>
     </ul>
     
 </body>

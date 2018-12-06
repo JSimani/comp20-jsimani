@@ -1,0 +1,11 @@
+img {
+    width: 1000px;
+}
+
+li, p, h1, h2 {
+    width: 1000px;
+}
+
+h1, h2, p {
+    margin-left: 25px;
+}
