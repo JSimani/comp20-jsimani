@@ -16,14 +16,19 @@
     </p>
 
     <h2>Methodology</h2>
-    <p>
-        I used various queries to the server, through all three possible routes, to find various vulnerabilities in its structure and exploit them to show the server's weaknesses. 
-    </p>
+    <p>I used a tool called <a href="https://www.getpostman.com/">Postman</a> to send various queries to the given server, through both POST and GET routes. This application allowed me to easily visualize what I was sending in my request, as well as the response sent by the server. </p>
+    <p>I also used a bash script to send an absurdly large amount of requests to the server through multiple different sessions on the command line. This allowed me to successfully perform a DDoS attack on the server and overload it.</p>
 
     <h2>Abstract of Findings</h2>
+    <p>Using the aforementioned methodology, any competent hacker would be able to: </p>
+    <ol id='abstract'>
+        <li>Serve any content they want to the users of a server </li>
+        <li>Crash the server so that no one would be able to use it for any extended amount of time </li> 
+        <li>Gather all of the sensitive information that is stored internally within the server </li>
+    </ol>
 
     <h2>Issues Found</h2>
-    <ol>
+    <ol id='issues'>
         <li>
             Cross Site Scripting
             <ul>

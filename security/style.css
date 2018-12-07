@@ -10,13 +10,22 @@ h1, h2, p {
     margin-left: 18px;
 }
 
-ol li {
-    font-size: 24px;
+#issues li {
+    font-size: 20px;
     font-weight: bold;
 }
 
-ul li, code {
+#issues ul li, #issues code {
     margin-left: -16px;
     font-size: 16px;
     font-weight: normal;
+}
+
+h1 {
+    font-size: 36px;
+}
+
+h2 {
+    font-size: 28px;
+    margin-bottom: -10px;
 }
